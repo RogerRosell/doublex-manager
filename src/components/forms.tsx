@@ -15,13 +15,14 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { z } from "zod";
-import { ParentRollFormSchema } from "@/dataModel/ParentRoll";
-
+import { ParentRollFormSchema, TParentRoll } from "@/dataModel/ParentRoll";
 import { onSubmitAction } from "@/actions/actions";
+// import { toast } from '@/hooks/use-toast';
+// import { ToastAction } from "@/components/ui/toast"
 
 type FormState = {
   message: string;
-  fields?: { name: string, purchaseDate: Date | string };
+  fields?: TParentRoll;
   issues?: string[];
 };
 
@@ -29,7 +30,7 @@ export const Forms = ({ formType, name }:{formType: string, name: string}) => {
   console.log("formType >> ", formType);
   const initialState: FormState = {
     message: "",
-    fields: { name: name, purchaseDate: "" },
+    fields: { name: name, purchaseDate: "yyyy-MM-dd"  },
     issues: [],
   }
   const [state, formAction] = useActionState(onSubmitAction, initialState);
@@ -38,13 +39,27 @@ export const Forms = ({ formType, name }:{formType: string, name: string}) => {
     defaultValues: {...initialState.fields},
   });
 
-  console.log("state >> ", state);
+  // const showMessage = (message: string) => {
+  //   toast({
+  //     title: "Uh oh! Something went wrong.",
+  //     description: message,
+  //     action: (
+  //       <ToastAction altText="Goto schedule to undo">Undo</ToastAction>
+  //     ),
+  //   })
+  // }
+
+  // if (state?.message !== "" && !state.issues) showMessage(state.message);
+  // if (state?.issues) showMessage(state.issues.join(", "));
+
+  
+  // console.log("state >> ", state);
 
   const formRef = useRef<HTMLFormElement>(null);
 
 return (
   <Form {...form}>
-     {state?.message !== "" && !state.issues && (
+     {state?.message !== "" && !state.issues && (      
         <div className="text-red-500">{state.message}</div>
       )}
       {state?.issues && (

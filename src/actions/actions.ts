@@ -5,7 +5,7 @@ import { createParentRoll } from "@/db/queries/parent"
 
 export type FormState = {
   message: string;
-  fields?: { name: string, purchaseDate: Date | string };
+  fields?: TParentRoll;
   issues?: string[];
 };
 
@@ -33,7 +33,7 @@ export async function onSubmitAction(
   if (!parsed.success) {
     const fields = {
       name: formData.name.toString(),
-      purchaseDate: new Date(formData.purchaseDate as string).toISOString(),
+      purchaseDate: formData.purchaseDate ? new Date(formData.purchaseDate as string) : undefined,
     };
     return {
       message: "Invalid form data",
@@ -42,7 +42,7 @@ export async function onSubmitAction(
     };
   }
   
-  await createParentRoll({name: parsed.data.name, date: new Date(parsed.data.purchaseDate as string).toISOString(), qrCodeUrl: "" })
+  await createParentRoll({name: parsed.data.name, date: new Date(parsed.data.purchaseDate as string).toISOString() })
    .then((value: TParentRoll) => {
       if (typeof value.id === "number") {
         return { message: "New Parent roll created" };
@@ -51,7 +51,5 @@ export async function onSubmitAction(
    .catch((err) => {
     return { message: `Error: ${err}` };
    })
-
    return { message: "New Parent roll created"}
-  
 }

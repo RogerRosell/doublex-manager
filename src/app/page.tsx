@@ -1,15 +1,15 @@
 import { Forms } from '@/components/forms';
-// import { MailForm } from "./MailForm";
-import { getRandomName } from "@/actions/actions";  
+import { getRandomName } from "@/actions/actions";
 
 export default async function Home() {
   const name: string = await getRandomName();
   return (
-    <div className="max-w-3xl mx-auto pt-5">
+    <div className="max-w-3xl mx-auto pt-5 flex justify-center items-center h-screen">
       {name && (
-        <Forms formType="ParentRoll" name={name} />
-        )}      
-      {/* <MailForm /> */}
+        <div className="max-w-[250px]">
+          <Forms formType="ParentRoll" name={name} />
+        </div>
+      )}
     </div>
   );
 }
