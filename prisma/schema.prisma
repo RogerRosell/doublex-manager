@@ -1,0 +1,45 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model ParentRoll {
+  id         Int          @id @default(autoincrement())
+  name       String
+  date       DateTime     @db.Date
+  qrCodeUrl  String
+  childRolls ChildRoll[]
+  CameraRoll CameraRoll[]
+}
+
+model ChildRoll {
+  id           Int        @id @default(autoincrement())
+  name         String
+  date         DateTime   @db.Date
+  qrCodeUrl    String
+  parentRollId Int
+  parentRoll   ParentRoll @relation(fields: [parentRollId], references: [id])
+
+  @@unique([name, parentRollId])
+}
+
+model CameraRoll {
+  id           Int        @id @default(autoincrement())
+  name         String
+  date         DateTime   @db.Date
+  exposures    Int
+  qrCodeUrl    String
+  parentRollId Int
+  parentRoll   ParentRoll @relation(fields: [parentRollId], references: [id])
+}
+
+model Randomname {
+  id        Int      @id(map: "RandomName_pkey") @default(autoincrement())
+  name      String
+  isUsed    Boolean  @default(false)
+  createdAt DateTime @default(now())
+}
